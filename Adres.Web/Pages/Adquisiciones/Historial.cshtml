@@ -1,0 +1,175 @@
+@page
+@using System.Text.Json
+@using System.Text.Json.Nodes
+@model Adres.Web.Pages.Adquisiciones.HistorialModel
+@{
+    ViewData["Title"] = "Historial de Cambios";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-primary">
+            <i class="fas fa-history"></i> Historial de Cambios
+        </h1>
+        <a asp-page="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%">Fecha</th>
+                            <th style="width: 5%">ID</th>
+                            <th style="width: 10%">Tipo</th>
+                            <th style="width: 35%">Valor Anterior</th>
+                            <th style="width: 35%">Valor Nuevo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Historial.OrderByDescending(h => h.Fecha))
+                        {
+                            <tr>
+                                <td class="align-middle small">@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td class="align-middle small">@item.AdquisicionId</td>
+                                <td class="align-middle">
+                                    <span class="badge @(item.CampoModificado == "Estado" ? "bg-warning" : "bg-info")">
+                                        @item.CampoModificado
+                                    </span>
+                                </td>
+                                <td class="align-middle">
+                                    @if (item.CampoModificado == "Estado")
+                                    {
+                                        <span class="badge bg-secondary">@item.ValorAnterior</span>
+                                    }
+                                    else if (TryParseJson(item.ValorAnterior, out var anterior))
+                                    {
+                                        <div class="json-lista">
+                                            @foreach (var prop in anterior)
+                                            {
+                                                <div class="json-linea">
+                                                    <span class="json-propiedad">@FormatPropertyName(prop.Key):</span>
+                                                    <span class="json-valor">@FormatValue(prop.Value?.ToString() ?? "")</span>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </td>
+                                <td class="align-middle">
+                                    @if (item.CampoModificado == "Estado")
+                                    {
+                                        <span class="badge @(item.ValorNuevo == "Activo" ? "bg-success" : "bg-danger")">
+                                            @item.ValorNuevo
+                                        </span>
+                                    }
+                                    else if (TryParseJson(item.ValorNuevo, out var nuevo))
+                                    {
+                                        <div class="json-lista">
+                                            @foreach (var prop in nuevo)
+                                            {
+                                                <div class="json-linea">
+                                                    <span class="json-propiedad">@FormatPropertyName(prop.Key):</span>
+                                                    <span class="json-valor">@FormatValue(prop.Value?.ToString() ?? "")</span>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .json-lista {
+        font-size: 0.75rem;
+        line-height: 1.4;
+    }
+
+    .json-linea {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0.1rem 0;
+    }
+
+    .json-propiedad {
+        color: #495057;
+        font-weight: 500;
+        min-width: 120px;
+    }
+
+    .json-valor {
+        color: #6c757d;
+    }
+
+    .table td {
+        padding: 0.5rem;
+        vertical-align: top;
+    }
+
+    .table th {
+        padding: 0.75rem 0.5rem;
+        background-color: #f8f9fa;
+        font-size: 0.9rem;
+    }
+
+    .badge {
+        font-size: 0.8rem;
+    }
+
+    .small {
+        font-size: 0.8rem;
+    }
+</style>
+
+@functions {
+    private bool TryParseJson(string json, out JsonObject result)
+    {
+        try
+        {
+            result = JsonNode.Parse(json)?.AsObject() ?? null;
+            return result != null;
+        }
+        catch
+        {
+            result = null;
+            return false;
+        }
+    }
+
+    private string FormatPropertyName(string propertyName)
+    {
+        switch (propertyName)
+        {
+            case "UnidadAdministrativaId": return "Unidad Administrativa";
+            case "TipoBienServicioId": return "Tipo de Bien/Servicio";
+            case "ProveedorId": return "Proveedor";
+            case "Cantidad": return "Cantidad";
+            case "ValorUnitario": return "Valor Unitario";
+            case "ValorTotal": return "Valor Total";
+            case "FechaAdquisicion": return "Fecha de Adquisición";
+            case "Estado": return "Estado";
+            default: return propertyName;
+        }
+    }
+
+    private string FormatValue(string value)
+    {
+        if (decimal.TryParse(value, out decimal number))
+        {
+            return number.ToString("C");
+        }
+        if (DateTime.TryParse(value, out DateTime date))
+        {
+            return date.ToString("dd/MM/yyyy");
+        }
+        return value;
+    }
+} 
