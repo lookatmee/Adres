@@ -1,0 +1,179 @@
+:root {
+    /* Paleta de colores ADRES */
+    --adres-navy: #1B2A4A;     /* Color principal del logo */
+    --adres-turquoise: #40E0D0; /* Color del símbolo + */
+    --adres-light-blue: #3498db; /* Color complementario */
+    --adres-white: #FFFFFF;
+    --adres-gray: #F8F9FA;
+    --adres-dark-gray: #343A40;
+}
+
+/* Estilos generales */
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem var(--adres-turquoise);
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar personalizado */
+.navbar-adres {
+    background-color: var(--adres-navy);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-adres .navbar-brand {
+    color: var(--adres-white);
+    font-weight: 600;
+}
+
+.navbar-adres .nav-link {
+    color: var(--adres-white) !important;
+    transition: color 0.3s ease;
+}
+
+.navbar-adres .nav-link:hover {
+    color: var(--adres-turquoise) !important;
+}
+
+/* Botones personalizados */
+.btn-adres-primary {
+    background-color: var(--adres-navy);
+    color: var(--adres-white);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-adres-primary:hover {
+    background-color: var(--adres-turquoise);
+    color: var(--adres-navy);
+}
+
+.btn-adres-secondary {
+    background-color: var(--adres-turquoise);
+    color: var(--adres-navy);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-adres-secondary:hover {
+    background-color: var(--adres-navy);
+    color: var(--adres-white);
+}
+
+/* Cards personalizadas */
+.card-adres {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.card-adres:hover {
+    transform: translateY(-5px);
+}
+
+.card-adres .card-header {
+    background-color: var(--adres-navy);
+    color: var(--adres-white);
+    border-radius: 8px 8px 0 0;
+}
+
+/* Tablas personalizadas */
+.table-adres {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.table-adres thead {
+    background-color: var(--adres-navy);
+    color: var(--adres-white);
+}
+
+.table-adres tbody tr:hover {
+    background-color: var(--adres-gray);
+}
+
+/* Forms personalizados */
+.form-control-adres {
+    border: 2px solid var(--adres-gray);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.form-control-adres:focus {
+    border-color: var(--adres-turquoise);
+    box-shadow: none;
+}
+
+/* Badges personalizados */
+.badge-adres {
+    background-color: var(--adres-turquoise);
+    color: var(--adres-navy);
+    padding: 0.5em 1em;
+    border-radius: 20px;
+}
+
+/* Footer personalizado */
+.footer-adres {
+    background-color: var(--adres-navy);
+    color: var(--adres-white);
+    padding: 1rem 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Animaciones */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Utilidades */
+.text-adres-primary {
+    color: var(--adres-navy) !important;
+}
+
+.text-adres-secondary {
+    color: var(--adres-turquoise) !important;
+}
+
+.bg-adres-primary {
+    background-color: var(--adres-navy) !important;
+}
+
+.bg-adres-secondary {
+    background-color: var(--adres-turquoise) !important;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}

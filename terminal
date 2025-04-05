@@ -1,0 +1,54 @@
+# Eliminar la solución y proyectos existentes si los hay
+rm -rf Adres.API Adres.Application Adres.Domain Adres.Infrastructure Adres.sln
+
+# Crear nueva solución
+dotnet new sln -n Adres
+
+# Crear proyectos con sus respectivos csproj
+dotnet new classlib -n Adres.Domain -f net9.0
+dotnet new classlib -n Adres.Application -f net9.0
+dotnet new classlib -n Adres.Infrastructure -f net9.0
+dotnet new webapi -n Adres.API -f net9.0
+
+# Agregar proyectos a la solución
+dotnet sln add Adres.Domain/Adres.Domain.csproj
+dotnet sln add Adres.Application/Adres.Application.csproj
+dotnet sln add Adres.Infrastructure/Adres.Infrastructure.csproj
+dotnet sln add Adres.API/Adres.API.csproj
+
+# Agregar referencias entre proyectos
+dotnet add Adres.API/Adres.API.csproj reference Adres.Application/Adres.Application.csproj
+dotnet add Adres.API/Adres.API.csproj reference Adres.Infrastructure/Adres.Infrastructure.csproj
+dotnet add Adres.Application/Adres.Application.csproj reference Adres.Domain/Adres.Domain.csproj
+dotnet add Adres.Infrastructure/Adres.Infrastructure.csproj reference Adres.Application/Adres.Application.csproj
+dotnet add Adres.Infrastructure/Adres.Infrastructure.csproj reference Adres.Domain/Adres.Domain.csproj
+
+# Agregar paquetes NuGet con versiones correctas
+dotnet add Adres.Application/Adres.Application.csproj package AutoMapper --version 12.0.1
+dotnet add Adres.Application/Adres.Application.csproj package AutoMapper.Extensions.Microsoft.DependencyInjection --version 12.0.1
+dotnet add Adres.Application/Adres.Application.csproj package FluentValidation --version 11.9.0
+dotnet add Adres.Application/Adres.Application.csproj package FluentValidation.DependencyInjectionExtensions --version 11.9.0
+dotnet add Adres.Infrastructure/Adres.Infrastructure.csproj package Microsoft.EntityFrameworkCore.SqlServer --version 9.0.0-preview.1.24081.2
+dotnet add Adres.Infrastructure/Adres.Infrastructure.csproj package Microsoft.EntityFrameworkCore.Tools --version 9.0.0-preview.1.24081.2
+dotnet add Adres.API/Adres.API.csproj package Microsoft.EntityFrameworkCore.Design --version 9.0.0-preview.1.24081.2
+
+# Configurar secretos del usuario
+cd Adres.API
+dotnet user-secrets init
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "workstation id=mercoDB.mssql.somee.com;packet size=4096;user id=adolfojinete_SQLLogin_1;pwd=uoiszu2vzt;data source=mercoDB.mssql.somee.com;persist security info=False;initial catalog=mercoDB;TrustServerCertificate=True"
+dotnet user-secrets list
+
+dotnet restore
+dotnet build Adres.Domain/Adres.Domain.csproj
+dotnet build Adres.Application/Adres.Application.csproj
+dotnet build Adres.Infrastructure/Adres.Infrastructure.csproj
+dotnet build Adres.API/Adres.API
+
+dotnet ef migrations remove --project Adres.Infrastructure --startup-project Adres.API
+dotnet ef migrations add InitialMigration --project Adres.Infrastructure --startup-project Adres.API --verbose
+dotnet ef database update --project Adres.Infrastructure --startup-project Adres.API
+
+dotnet ef migrations list --project Adres.Infrastructure --startup-project Adres.API
+
+dotnet clean
+dotnet build

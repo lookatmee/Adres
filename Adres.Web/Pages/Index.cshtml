@@ -1,0 +1,104 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="text-center mb-5">
+    <h1 class="display-4 text-adres-primary mb-4">Bienvenido a ADRES</h1>
+    <p class="lead">Sistema de Gestión de Adquisiciones</p>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card card-adres h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-shopping-cart"></i> Adquisiciones</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Gestiona todas las adquisiciones de bienes y servicios de la organización.</p>
+                <a asp-page="/Adquisiciones/Index" class="btn btn-adres-primary">
+                    Ir a Adquisiciones <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-adres h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-building"></i> Unidades Administrativas</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Administra las unidades y departamentos de la organización.</p>
+                <a asp-page="/Unidades/Index" class="btn btn-adres-primary">
+                    Ir a Unidades <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-adres h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-boxes"></i> Tipos de Bienes/Servicios</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Gestiona los diferentes tipos de bienes y servicios disponibles.</p>
+                <a asp-page="/TiposBienes/Index" class="btn btn-adres-primary">
+                    Ir a Tipos <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-adres h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-truck"></i> Proveedores</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Administra el catálogo de proveedores de la organización.</p>
+                <a asp-page="/Proveedores/Index" class="btn btn-adres-primary">
+                    Ir a Proveedores <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-adres h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-file-alt"></i> Documentación</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Gestiona los documentos relacionados con las adquisiciones.</p>
+                <a asp-page="/Documentos/Index" class="btn btn-adres-primary">
+                    Ir a Documentos <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-adres h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-history"></i> Historial</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Consulta el historial de cambios en las adquisiciones.</p>
+                <a asp-page="/Historial/Index" class="btn btn-adres-primary">
+                    Ver Historial <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.card-adres').addClass('fade-in');
+        });
+    </script>
+}

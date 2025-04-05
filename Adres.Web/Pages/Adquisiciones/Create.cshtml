@@ -1,0 +1,90 @@
+@page
+@model Adres.Web.Pages.Adquisiciones.CreateModel
+@{
+    ViewData["Title"] = "Nueva Adquisición";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-adres-primary"><i class="fas fa-shopping-cart"></i> Nueva Adquisición</h1>
+    <a asp-page="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Volver
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card card-adres">
+            <div class="card-body">
+                <form method="post" id="createForm" class="needs-validation" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Adquisicion.UnidadAdministrativaId" class="form-label"></label>
+                            <select asp-for="Adquisicion.UnidadAdministrativaId" asp-items="Model.UnidadesAdministrativas" class="form-select form-select-adres" required>
+                                <option value="">Seleccione una unidad administrativa</option>
+                            </select>
+                            <span asp-validation-for="Adquisicion.UnidadAdministrativaId" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                La unidad administrativa es requerida.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Adquisicion.TipoBienServicioId" class="form-label"></label>
+                            <select asp-for="Adquisicion.TipoBienServicioId" asp-items="Model.TiposBienesServicios" class="form-select form-select-adres" required>
+                                <option value="">Seleccione un tipo de bien/servicio</option>
+                            </select>
+                            <span asp-validation-for="Adquisicion.TipoBienServicioId" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                El tipo de bien/servicio es requerido.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Adquisicion.ProveedorId" class="form-label"></label>
+                            <select asp-for="Adquisicion.ProveedorId" asp-items="Model.Proveedores" class="form-select form-select-adres" required>
+                                <option value="">Seleccione un proveedor</option>
+                            </select>
+                            <span asp-validation-for="Adquisicion.ProveedorId" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                El proveedor es requerido.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Adquisicion.Presupuesto" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="Adquisicion.Presupuesto" class="form-control form-control-adres" required />
+                            </div>
+                            <span asp-validation-for="Adquisicion.Presupuesto" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                El presupuesto es requerido y debe ser mayor a 0.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-adres-primary">
+                            <i class="fas fa-save"></i> Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#createForm').on('submit', function(event) {
+                if (!validateForm('createForm')) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+        });
+    </script>
+} 

@@ -1,0 +1,72 @@
+@page
+@model Adres.Web.Pages.Proveedores.IndexModel
+@{
+    ViewData["Title"] = "Proveedores";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-adres-primary"><i class="fas fa-truck"></i> Proveedores</h1>
+    <a asp-page="Create" class="btn btn-adres-primary">
+        <i class="fas fa-plus"></i> Nuevo Proveedor
+    </a>
+</div>
+
+<div class="card card-adres">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-adres">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Proveedores)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.Nombre</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-adres-secondary" data-bs-toggle="tooltip" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="confirmarEliminacion(@item.Id)" data-bs-toggle="tooltip" title="Eliminar">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (!Model.Proveedores.Any())
+        {
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle fa-2x mb-3"></i>
+                <p class="mb-0">No se encontraron proveedores registrados.</p>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmarEliminacion(id) {
+            confirmAction('¿Eliminar proveedor?', '¿Está seguro de que desea eliminar este proveedor?')
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = `/Proveedores/Delete?id=${id}`;
+                    }
+                });
+        }
+
+        $(document).ready(function() {
+            initTooltips();
+        });
+    </script>
+} 

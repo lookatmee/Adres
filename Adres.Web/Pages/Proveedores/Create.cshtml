@@ -1,0 +1,32 @@
+@page
+@model Adres.Web.Pages.Proveedores.CreateModel
+@{
+    ViewData["Title"] = "Crear Proveedor";
+}
+
+<div class="container-fluid px-4">
+    <h2 class="mt-4">@ViewData["Title"]</h2>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                <div class="mb-3">
+                    <label asp-for="Proveedor.Nombre" class="form-label"></label>
+                    <input asp-for="Proveedor.Nombre" class="form-control" />
+                    <span asp-validation-for="Proveedor.Nombre" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

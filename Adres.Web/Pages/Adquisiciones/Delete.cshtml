@@ -1,0 +1,50 @@
+@page "{id:int}"
+@model Adres.Web.Pages.Adquisiciones.DeleteModel
+@{
+    ViewData["Title"] = "Eliminar Adquisición";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-adres-primary"><i class="fas fa-shopping-cart"></i> Eliminar Adquisición</h1>
+    <a asp-page="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Volver
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card card-adres">
+            <div class="card-body">
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> ¿Está seguro de que desea eliminar esta adquisición?
+                </div>
+
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Adquisicion.UnidadAdministrativa!.Nombre)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Adquisicion.UnidadAdministrativa!.Nombre)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Adquisicion.TipoBienServicio!.Descripcion)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Adquisicion.TipoBienServicio!.Descripcion)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Adquisicion.Proveedor!.Nombre)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Adquisicion.Proveedor!.Nombre)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Adquisicion.Presupuesto)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Adquisicion.Presupuesto)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Adquisicion.Estado)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Adquisicion.Estado)</dd>
+                </dl>
+
+                <form method="post">
+                    <input type="hidden" asp-for="Adquisicion.Id" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Confirmar Eliminación
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 

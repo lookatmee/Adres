@@ -1,0 +1,88 @@
+@page "{id:int}"
+@model Adres.Web.Pages.Documentacion.EditModel
+@{
+    ViewData["Title"] = "Editar Documento";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-adres-primary"><i class="fas fa-file-alt"></i> Editar Documento</h1>
+    <a asp-page="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Volver
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card card-adres">
+            <div class="card-body">
+                <form method="post" id="editForm" class="needs-validation" novalidate>
+                    <input type="hidden" asp-for="Documento.Id" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Documento.AdquisicionId" class="form-label"></label>
+                        <select asp-for="Documento.AdquisicionId" asp-items="Model.Adquisiciones" class="form-select form-select-adres" required>
+                            <option value="">Seleccione una adquisición</option>
+                        </select>
+                        <span asp-validation-for="Documento.AdquisicionId" class="text-danger"></span>
+                        <div class="invalid-feedback">
+                            La adquisición es requerida.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Documento.TipoDocumento" class="form-label"></label>
+                        <input asp-for="Documento.TipoDocumento" class="form-control form-control-adres" required />
+                        <span asp-validation-for="Documento.TipoDocumento" class="text-danger"></span>
+                        <div class="invalid-feedback">
+                            El tipo de documento es requerido.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Documento.NumeroDocumento" class="form-label"></label>
+                        <input asp-for="Documento.NumeroDocumento" class="form-control form-control-adres" required />
+                        <span asp-validation-for="Documento.NumeroDocumento" class="text-danger"></span>
+                        <div class="invalid-feedback">
+                            El número de documento es requerido.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Documento.FechaDocumento" class="form-label"></label>
+                        <input asp-for="Documento.FechaDocumento" class="form-control form-control-adres" type="date" required />
+                        <span asp-validation-for="Documento.FechaDocumento" class="text-danger"></span>
+                        <div class="invalid-feedback">
+                            La fecha del documento es requerida.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Documento.Observaciones" class="form-label"></label>
+                        <textarea asp-for="Documento.Observaciones" class="form-control form-control-adres" rows="3"></textarea>
+                        <span asp-validation-for="Documento.Observaciones" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-adres-primary">
+                            <i class="fas fa-save"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#editForm').on('submit', function(event) {
+                if (!validateForm('editForm')) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+        });
+    </script>
+} 

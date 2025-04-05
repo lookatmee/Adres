@@ -1,0 +1,50 @@
+@page "{id:int}"
+@model Adres.Web.Pages.Documentacion.DeleteModel
+@{
+    ViewData["Title"] = "Eliminar Documento";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-adres-primary"><i class="fas fa-file-alt"></i> Eliminar Documento</h1>
+    <a asp-page="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Volver
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card card-adres">
+            <div class="card-body">
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> ¿Está seguro de que desea eliminar este documento?
+                </div>
+
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Documento.Adquisicion!.Id)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Documento.Adquisicion!.Id)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Documento.TipoDocumento)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Documento.TipoDocumento)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Documento.NumeroDocumento)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Documento.NumeroDocumento)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Documento.FechaDocumento)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Documento.FechaDocumento)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Documento.Observaciones)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Documento.Observaciones)</dd>
+                </dl>
+
+                <form method="post">
+                    <input type="hidden" asp-for="Documento.Id" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Confirmar Eliminación
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 
