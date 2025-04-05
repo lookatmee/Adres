@@ -1,0 +1,57 @@
+@page
+@model Adres.Web.Pages.Historial.IndexModel
+@{
+    ViewData["Title"] = "Historial de Cambios";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="text-adres-primary">@ViewData["Title"]</h1>
+    </div>
+    <div>
+        <a asp-page="/Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </div>
+</div>
+
+<div class="card card-adres">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Adquisición</th>
+                        <th>Campo Modificado</th>
+                        <th>Valor Anterior</th>
+                        <th>Valor Nuevo</th>
+                        <th>Usuario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.HistorialCambios != null && Model.HistorialCambios.Any())
+                    {
+                        @foreach (var cambio in Model.HistorialCambios)
+                        {
+                            <tr>
+                                <td>@cambio.FechaCambio.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@cambio.AdquisicionId</td>
+                                <td>@cambio.CampoModificado</td>
+                                <td>@cambio.ValorAnterior</td>
+                                <td>@cambio.ValorNuevo</td>
+                                <td>@cambio.Usuario</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center">No hay registros de cambios.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> 
