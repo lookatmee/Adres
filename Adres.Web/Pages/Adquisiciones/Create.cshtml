@@ -65,14 +65,14 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label asp-for="Adquisicion.Presupuesto" class="form-label"></label>
-                            <div class="input-group">
+                            <div class="input-group has-validation">
                                 <span class="input-group-text">$</span>
                                 <input asp-for="Adquisicion.Presupuesto" class="form-control form-control-adres" type="number" min="0.01" step="0.01" required />
+                                <div class="invalid-feedback">
+                                    El presupuesto es requerido y debe ser mayor a 0.
+                                </div>
                             </div>
                             <span asp-validation-for="Adquisicion.Presupuesto" class="text-danger"></span>
-                            <div class="invalid-feedback">
-                                El presupuesto es requerido y debe ser mayor a 0.
-                            </div>
                         </div>
                     </div>
 
@@ -80,21 +80,21 @@
                         <div class="col-md-4">
                             <label asp-for="Adquisicion.Cantidad" class="form-label">Cantidad</label>
                             <input asp-for="Adquisicion.Cantidad" class="form-control form-control-adres" type="number" min="1" required onchange="calcularValorTotal()" />
-                            <span asp-validation-for="Adquisicion.Cantidad" class="text-danger"></span>
                             <div class="invalid-feedback">
                                 La cantidad es requerida y debe ser mayor a 0.
                             </div>
+                            <span asp-validation-for="Adquisicion.Cantidad" class="text-danger"></span>
                         </div>
                         <div class="col-md-4">
                             <label asp-for="Adquisicion.ValorUnitario" class="form-label">Valor Unitario</label>
-                            <div class="input-group">
+                            <div class="input-group has-validation">
                                 <span class="input-group-text">$</span>
                                 <input asp-for="Adquisicion.ValorUnitario" class="form-control form-control-adres" type="number" min="0.01" step="0.01" required onchange="calcularValorTotal()" />
+                                <div class="invalid-feedback">
+                                    El valor unitario es requerido y debe ser mayor a 0.
+                                </div>
                             </div>
                             <span asp-validation-for="Adquisicion.ValorUnitario" class="text-danger"></span>
-                            <div class="invalid-feedback">
-                                El valor unitario es requerido y debe ser mayor a 0.
-                            </div>
                         </div>
                         <div class="col-md-4">
                             <label asp-for="Adquisicion.ValorTotal" class="form-label">Valor Total</label>
@@ -123,22 +123,37 @@
             const cantidad = parseFloat(document.getElementById('Adquisicion_Cantidad').value) || 0;
             const valorUnitario = parseFloat(document.getElementById('Adquisicion_ValorUnitario').value) || 0;
 
+            // Validar Presupuesto
+            const presupuestoInput = document.getElementById('Adquisicion_Presupuesto');
             if (presupuesto <= 0) {
-                document.getElementById('Adquisicion_Presupuesto').setCustomValidity('El presupuesto debe ser mayor a 0');
+                presupuestoInput.setCustomValidity('El presupuesto es requerido y debe ser mayor a 0.');
+                presupuestoInput.classList.add('is-invalid');
             } else {
-                document.getElementById('Adquisicion_Presupuesto').setCustomValidity('');
+                presupuestoInput.setCustomValidity('');
+                presupuestoInput.classList.remove('is-invalid');
+                presupuestoInput.classList.add('is-valid');
             }
 
+            // Validar Cantidad
+            const cantidadInput = document.getElementById('Adquisicion_Cantidad');
             if (cantidad <= 0) {
-                document.getElementById('Adquisicion_Cantidad').setCustomValidity('La cantidad debe ser mayor a 0');
+                cantidadInput.setCustomValidity('La cantidad es requerida y debe ser mayor a 0.');
+                cantidadInput.classList.add('is-invalid');
             } else {
-                document.getElementById('Adquisicion_Cantidad').setCustomValidity('');
+                cantidadInput.setCustomValidity('');
+                cantidadInput.classList.remove('is-invalid');
+                cantidadInput.classList.add('is-valid');
             }
 
+            // Validar Valor Unitario
+            const valorUnitarioInput = document.getElementById('Adquisicion_ValorUnitario');
             if (valorUnitario <= 0) {
-                document.getElementById('Adquisicion_ValorUnitario').setCustomValidity('El valor unitario debe ser mayor a 0');
+                valorUnitarioInput.setCustomValidity('El valor unitario es requerido y debe ser mayor a 0.');
+                valorUnitarioInput.classList.add('is-invalid');
             } else {
-                document.getElementById('Adquisicion_ValorUnitario').setCustomValidity('');
+                valorUnitarioInput.setCustomValidity('');
+                valorUnitarioInput.classList.remove('is-invalid');
+                valorUnitarioInput.classList.add('is-valid');
             }
         }
 
@@ -155,6 +170,9 @@
             $('#Adquisicion_Presupuesto').on('input', validarCamposNumericos);
             $('#Adquisicion_Cantidad').on('input', validarCamposNumericos);
             $('#Adquisicion_ValorUnitario').on('input', validarCamposNumericos);
+
+            // Validar al cargar la página
+            validarCamposNumericos();
 
             $('#createForm').on('submit', function(event) {
                 validarCamposNumericos();
