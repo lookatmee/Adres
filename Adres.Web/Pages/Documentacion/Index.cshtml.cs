@@ -1,5 +1,6 @@
 using Adres.Web.Models;
 using Adres.Web.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Adres.Web.Pages.Documentacion;
@@ -13,13 +14,13 @@ public class IndexModel : PageModel
         _apiService = apiService;
     }
 
-    public List<DocumentacionDto> Documentos { get; set; } = new();
+    public List<DocumentacionWebDto> Documentos { get; set; } = new();
 
     public async Task OnGetAsync()
     {
         try
         {
-            Documentos = await _apiService.GetListAsync<DocumentacionDto>("documentacion") ?? new();
+            Documentos = await _apiService.GetListAsync<DocumentacionWebDto>("documentacion") ?? new();
         }
         catch (Exception ex)
         {

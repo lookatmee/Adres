@@ -15,13 +15,13 @@ public class DeleteModel : PageModel
     }
 
     [BindProperty]
-    public DocumentacionDto Documento { get; set; } = new();
+    public DocumentacionWebDto Documento { get; set; } = new();
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
         try
         {
-            var documento = await _apiService.GetAsync<DocumentacionDto>($"documentacion/{id}");
+            var documento = await _apiService.GetAsync<DocumentacionWebDto>($"documentacion/{id}");
             if (documento == null)
             {
                 return NotFound();

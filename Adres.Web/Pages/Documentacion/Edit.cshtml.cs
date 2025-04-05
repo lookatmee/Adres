@@ -16,7 +16,7 @@ public class EditModel : PageModel
     }
 
     [BindProperty]
-    public DocumentacionDto Documento { get; set; } = new();
+    public DocumentacionWebDto Documento { get; set; } = new();
 
     public SelectList Adquisiciones { get; set; } = default!;
 
@@ -24,7 +24,7 @@ public class EditModel : PageModel
     {
         try
         {
-            var documento = await _apiService.GetAsync<DocumentacionDto>($"documentacion/{id}");
+            var documento = await _apiService.GetAsync<DocumentacionWebDto>($"documentacion/{id}");
             if (documento == null)
             {
                 return NotFound();
@@ -54,7 +54,7 @@ public class EditModel : PageModel
 
         try
         {
-            await _apiService.PutAsync<DocumentacionDto>($"documentacion/{Documento.Id}", Documento);
+            await _apiService.PutAsync<DocumentacionWebDto>($"documentacion/{Documento.Id}", Documento);
             TempData["Success"] = "Documento actualizado exitosamente";
             return RedirectToPage("./Index");
         }

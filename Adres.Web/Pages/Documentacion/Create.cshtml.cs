@@ -16,7 +16,7 @@ public class CreateModel : PageModel
     }
 
     [BindProperty]
-    public DocumentacionDto Documento { get; set; } = new();
+    public DocumentacionWebDto Documento { get; set; } = new();
 
     public SelectList Adquisiciones { get; set; } = default!;
 
@@ -43,7 +43,7 @@ public class CreateModel : PageModel
 
         try
         {
-            await _apiService.PostAsync<DocumentacionDto>("documentacion", Documento);
+            await _apiService.PostAsync<DocumentacionWebDto>("documentacion", Documento);
             TempData["Success"] = "Documento creado exitosamente";
             return RedirectToPage("./Index");
         }

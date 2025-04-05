@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Adres.Web.Models;
 
-public class DocumentacionDto
+public class DocumentacionWebDto
 {
     public int Id { get; set; }
 
