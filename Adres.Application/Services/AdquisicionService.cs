@@ -11,6 +11,7 @@ public interface IAdquisicionService
     Task<AdquisicionDto> CreateAsync(CreateAdquisicionDto createDto, string usuario);
     Task<AdquisicionDto> GetByIdAsync(int id);
     Task<IEnumerable<AdquisicionDto>> GetAllAsync();
+    Task<IEnumerable<AdquisicionDto>> BuscarAsync(FiltroAdquisicionDto filtro);
     Task UpdateAsync(int id, UpdateAdquisicionDto updateDto, string usuario);
     Task DesactivarAsync(int id, string usuario);
 }
@@ -71,6 +72,36 @@ public class AdquisicionService : IAdquisicionService
             .Include(a => a.Proveedor)
             .ToListAsync();
 
+        return _mapper.Map<IEnumerable<AdquisicionDto>>(adquisiciones);
+    }
+
+    public async Task<IEnumerable<AdquisicionDto>> BuscarAsync(FiltroAdquisicionDto filtro)
+    {
+        IQueryable<Adquisicion> query = _adquisicionRepository.GetQueryable()
+            .Include(a => a.UnidadAdministrativa)
+            .Include(a => a.TipoBienServicio)
+            .Include(a => a.Proveedor);
+
+        // Aplicar filtros
+        if (filtro.UnidadAdministrativaId.HasValue)
+            query = query.Where(a => a.UnidadAdministrativaId == filtro.UnidadAdministrativaId);
+
+        if (filtro.TipoBienServicioId.HasValue)
+            query = query.Where(a => a.TipoBienServicioId == filtro.TipoBienServicioId);
+
+        if (filtro.ProveedorId.HasValue)
+            query = query.Where(a => a.ProveedorId == filtro.ProveedorId);
+
+        if (!string.IsNullOrEmpty(filtro.Estado))
+            query = query.Where(a => a.Estado == filtro.Estado.ToLower());
+
+        if (filtro.FechaDesde.HasValue)
+            query = query.Where(a => a.FechaAdquisicion.Date >= filtro.FechaDesde.Value.Date);
+
+        if (filtro.FechaHasta.HasValue)
+            query = query.Where(a => a.FechaAdquisicion.Date <= filtro.FechaHasta.Value.Date);
+
+        var adquisiciones = await query.ToListAsync();
         return _mapper.Map<IEnumerable<AdquisicionDto>>(adquisiciones);
     }
 

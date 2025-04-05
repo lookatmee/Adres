@@ -58,24 +58,24 @@ public class IndexModel : PageModel
 
     private async Task CargarAdquisiciones()
     {
-        var endpoint = "adquisiciones";
         var queryParams = new List<string>();
 
         if (UnidadAdministrativaId.HasValue)
-            queryParams.Add($"unidadId={UnidadAdministrativaId}");
+            queryParams.Add($"UnidadAdministrativaId={UnidadAdministrativaId}");
         if (TipoBienServicioId.HasValue)
-            queryParams.Add($"tipoId={TipoBienServicioId}");
+            queryParams.Add($"TipoBienServicioId={TipoBienServicioId}");
         if (ProveedorId.HasValue)
-            queryParams.Add($"proveedorId={ProveedorId}");
+            queryParams.Add($"ProveedorId={ProveedorId}");
         if (!string.IsNullOrEmpty(Estado))
-            queryParams.Add($"estado={Estado}");
+            queryParams.Add($"Estado={Estado}");
         if (FechaDesde.HasValue)
-            queryParams.Add($"fechaDesde={FechaDesde:yyyy-MM-dd}");
+            queryParams.Add($"FechaDesde={FechaDesde:yyyy-MM-dd}");
         if (FechaHasta.HasValue)
-            queryParams.Add($"fechaHasta={FechaHasta:yyyy-MM-dd}");
+            queryParams.Add($"FechaHasta={FechaHasta:yyyy-MM-dd}");
 
-        if (queryParams.Any())
-            endpoint += "?" + string.Join("&", queryParams);
+        var endpoint = queryParams.Any() 
+            ? $"adquisiciones/buscar?{string.Join("&", queryParams)}"
+            : "adquisiciones";
 
         Adquisiciones = await _apiService.GetAsync<IEnumerable<AdquisicionDto>>(endpoint);
     }

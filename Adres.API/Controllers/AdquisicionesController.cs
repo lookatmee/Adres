@@ -50,6 +50,25 @@ public class AdquisicionesController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("buscar")]
+    public async Task<ActionResult<IEnumerable<object>>> Buscar([FromQuery] FiltroAdquisicionDto filtro)
+    {
+        var adquisiciones = await _adquisicionService.BuscarAsync(filtro);
+        var result = adquisiciones.Select(a => new
+        {
+            a.Id,
+            a.Cantidad,
+            a.ValorUnitario,
+            a.ValorTotal,
+            a.FechaAdquisicion,
+            a.Estado,
+            UnidadAdministrativa = new { a.UnidadAdministrativa.Id, a.UnidadAdministrativa.Nombre },
+            TipoBienServicio = new { a.TipoBienServicio.Id, a.TipoBienServicio.Descripcion },
+            Proveedor = new { a.Proveedor.Id, a.Proveedor.Nombre }
+        });
+        return Ok(result);
+    }
+
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, UpdateAdquisicionDto updateDto)
     {
