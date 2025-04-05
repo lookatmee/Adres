@@ -52,4 +52,6 @@ public class UpdateAdquisicionDto
     public int Cantidad { get; set; }
     public decimal ValorUnitario { get; set; }
     public int ProveedorId { get; set; }
+    public DateTime FechaAdquisicion { get; set; }
+    public string Estado { get; set; }
 } 

@@ -37,7 +37,7 @@ public class AdquisicionService : IAdquisicionService
         var adquisicion = _mapper.Map<Adquisicion>(createDto);
         adquisicion.ValorTotal = createDto.Cantidad * createDto.ValorUnitario;
         adquisicion.FechaAdquisicion = DateTime.Now;
-        adquisicion.Estado = "activo";
+        adquisicion.Estado = "Activo";
 
         var result = await _adquisicionRepository.AddAsync(adquisicion);
         
@@ -93,7 +93,7 @@ public class AdquisicionService : IAdquisicionService
             query = query.Where(a => a.ProveedorId == filtro.ProveedorId);
 
         if (!string.IsNullOrEmpty(filtro.Estado))
-            query = query.Where(a => a.Estado == filtro.Estado.ToLower());
+            query = query.Where(a => a.Estado.ToLower() == filtro.Estado.ToLower());
 
         if (filtro.FechaDesde.HasValue)
             query = query.Where(a => a.FechaAdquisicion.Date >= filtro.FechaDesde.Value.Date);
@@ -112,32 +112,68 @@ public class AdquisicionService : IAdquisicionService
             .Include(a => a.TipoBienServicio)
             .Include(a => a.Proveedor)
             .FirstOrDefaultAsync(a => a.Id == id);
+
+        if (adquisicion == null)
+            throw new Exception($"No se encontró la adquisición con ID {id}");
         
-        // Guardar valores anteriores para el historial
-        var valorAnterior = System.Text.Json.JsonSerializer.Serialize(adquisicion);
+        // Guardar valores anteriores relevantes para el historial
+        var valorAnteriorObj = new
+        {
+            adquisicion.UnidadAdministrativaId,
+            adquisicion.TipoBienServicioId,
+            adquisicion.ProveedorId,
+            adquisicion.Cantidad,
+            adquisicion.ValorUnitario,
+            adquisicion.ValorTotal,
+            adquisicion.Estado,
+            adquisicion.FechaAdquisicion
+        };
+        var valorAnterior = System.Text.Json.JsonSerializer.Serialize(valorAnteriorObj);
         
-        _mapper.Map(updateDto, adquisicion);
+        // Actualizar propiedades manualmente para asegurar el formato correcto
+        adquisicion.UnidadAdministrativaId = updateDto.UnidadAdministrativaId;
+        adquisicion.TipoBienServicioId = updateDto.TipoBienServicioId;
+        adquisicion.ProveedorId = updateDto.ProveedorId;
+        adquisicion.Cantidad = updateDto.Cantidad;
+        adquisicion.ValorUnitario = updateDto.ValorUnitario;
+        adquisicion.FechaAdquisicion = updateDto.FechaAdquisicion;
+        adquisicion.Estado = updateDto.Estado; // Esto mantendrá el formato exacto que viene del DTO
         adquisicion.ValorTotal = updateDto.Cantidad * updateDto.ValorUnitario;
         
         await _adquisicionRepository.UpdateAsync(adquisicion);
+
+        var valorNuevoObj = new
+        {
+            adquisicion.UnidadAdministrativaId,
+            adquisicion.TipoBienServicioId,
+            adquisicion.ProveedorId,
+            adquisicion.Cantidad,
+            adquisicion.ValorUnitario,
+            adquisicion.ValorTotal,
+            adquisicion.Estado,
+            adquisicion.FechaAdquisicion
+        };
         
         await RegistrarHistorial(id, "Actualización", 
             valorAnterior, 
-            System.Text.Json.JsonSerializer.Serialize(adquisicion), 
+            System.Text.Json.JsonSerializer.Serialize(valorNuevoObj), 
             usuario);
     }
 
     public async Task DesactivarAsync(int id, string usuario)
     {
         var adquisicion = await _adquisicionRepository.GetByIdAsync(id);
+        if (adquisicion == null)
+            throw new Exception($"No se encontró la adquisición con ID {id}");
+
         var estadoAnterior = adquisicion.Estado;
         
-        adquisicion.Estado = "inactivo";
+        adquisicion.Estado = "Inactivo"; // Cambiado a mayúscula inicial
         await _adquisicionRepository.UpdateAsync(adquisicion);
         
         await RegistrarHistorial(id, "Estado", 
             estadoAnterior, 
-            "inactivo", 
+            adquisicion.Estado, // Usar el mismo valor que se guardó
             usuario);
     }
 

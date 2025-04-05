@@ -46,8 +46,8 @@
                         <label asp-for="Estado" class="form-label">Estado</label>
                         <select asp-for="Estado" class="form-select">
                             <option value="">Todos</option>
-                            <option value="activo">Activo</option>
-                            <option value="inactivo">Inactivo</option>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
                         </select>
                     </div>
                     <div class="col-md-3">
@@ -100,8 +100,8 @@
                                     <td>@item.ValorTotal.ToString("C")</td>
                                     <td>@item.FechaAdquisicion.ToShortDateString()</td>
                                     <td>
-                                        <span class="badge @(item.Estado == "activo" ? "bg-success" : "bg-danger")">
-                                            @(item.Estado == "activo" ? "Activo" : "Inactivo")
+                                        <span class="badge @(item.Estado.Equals("Activo", StringComparison.OrdinalIgnoreCase) ? "bg-success" : "bg-danger")">
+                                            @item.Estado
                                         </span>
                                     </td>
                                     <td>
@@ -109,8 +109,8 @@
                                             <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Editar">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" title="Eliminar">
-                                                <i class="fas fa-trash"></i>
+                                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" title="Desactivar">
+                                                <i class="fas fa-power-off"></i>
                                             </a>
                                         </div>
                                     </td>

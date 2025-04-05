@@ -4,88 +4,127 @@
     ViewData["Title"] = "Editar Adquisición";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="text-adres-primary"><i class="fas fa-shopping-cart"></i> Editar Adquisición</h1>
-    <a asp-page="Index" class="btn btn-secondary">
-        <i class="fas fa-arrow-left"></i> Volver
-    </a>
-</div>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-primary">
+            <i class="fas fa-edit"></i> Editar Adquisición
+        </h1>
+        <a asp-page="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </div>
 
-<div class="row">
-    <div class="col-md-8">
-        <div class="card card-adres">
-            <div class="card-body">
-                <form method="post" id="editForm" class="needs-validation" novalidate>
-                    <input type="hidden" asp-for="Adquisicion.Id" />
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <input type="hidden" asp-for="Adquisicion.Id" />
 
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label asp-for="Adquisicion.UnidadAdministrativaId" class="form-label"></label>
-                            <select asp-for="Adquisicion.UnidadAdministrativaId" asp-items="Model.UnidadesAdministrativas" class="form-select form-select-adres" required>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Adquisicion.UnidadAdministrativaId" class="control-label">Unidad Administrativa</label>
+                            <select asp-for="Adquisicion.UnidadAdministrativaId" class="form-select" asp-items="Model.UnidadesAdministrativas">
                                 <option value="">Seleccione una unidad administrativa</option>
                             </select>
                             <span asp-validation-for="Adquisicion.UnidadAdministrativaId" class="text-danger"></span>
-                            <div class="invalid-feedback">
-                                La unidad administrativa es requerida.
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label asp-for="Adquisicion.TipoBienServicioId" class="form-label"></label>
-                            <select asp-for="Adquisicion.TipoBienServicioId" asp-items="Model.TiposBienesServicios" class="form-select form-select-adres" required>
-                                <option value="">Seleccione un tipo de bien/servicio</option>
-                            </select>
-                            <span asp-validation-for="Adquisicion.TipoBienServicioId" class="text-danger"></span>
-                            <div class="invalid-feedback">
-                                El tipo de bien/servicio es requerido.
-                            </div>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Adquisicion.TipoBienServicioId" class="control-label">Tipo de Bien/Servicio</label>
+                            <select asp-for="Adquisicion.TipoBienServicioId" class="form-select" asp-items="Model.TiposBienesServicios">
+                                <option value="">Seleccione un tipo</option>
+                            </select>
+                            <span asp-validation-for="Adquisicion.TipoBienServicioId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label asp-for="Adquisicion.ProveedorId" class="form-label"></label>
-                            <select asp-for="Adquisicion.ProveedorId" asp-items="Model.Proveedores" class="form-select form-select-adres" required>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Adquisicion.ProveedorId" class="control-label">Proveedor</label>
+                            <select asp-for="Adquisicion.ProveedorId" class="form-select" asp-items="Model.Proveedores">
                                 <option value="">Seleccione un proveedor</option>
                             </select>
                             <span asp-validation-for="Adquisicion.ProveedorId" class="text-danger"></span>
-                            <div class="invalid-feedback">
-                                El proveedor es requerido.
-                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label asp-for="Adquisicion.Presupuesto" class="form-label"></label>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Adquisicion.FechaAdquisicion" class="control-label">Fecha de Adquisición</label>
+                            <input asp-for="Adquisicion.FechaAdquisicion" class="form-control" type="date" />
+                            <span asp-validation-for="Adquisicion.FechaAdquisicion" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Adquisicion.Cantidad" class="control-label">Cantidad</label>
+                            <input asp-for="Adquisicion.Cantidad" class="form-control" type="number" min="1" />
+                            <span asp-validation-for="Adquisicion.Cantidad" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Adquisicion.ValorUnitario" class="control-label">Valor Unitario</label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
-                                <input asp-for="Adquisicion.Presupuesto" class="form-control form-control-adres" required />
+                                <input asp-for="Adquisicion.ValorUnitario" class="form-control" type="number" step="0.01" min="0.01" />
                             </div>
-                            <span asp-validation-for="Adquisicion.Presupuesto" class="text-danger"></span>
-                            <div class="invalid-feedback">
-                                El presupuesto es requerido y debe ser mayor a 0.
+                            <span asp-validation-for="Adquisicion.ValorUnitario" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Valor Total</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input id="valorTotal" class="form-control" readonly />
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-adres-primary">
-                            <i class="fas fa-save"></i> Guardar Cambios
-                        </button>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Adquisicion.Estado" class="control-label">Estado</label>
+                            <select asp-for="Adquisicion.Estado" class="form-select">
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                            </select>
+                            <span asp-validation-for="Adquisicion.Estado" class="text-danger"></span>
+                        </div>
                     </div>
-                </form>
-            </div>
+                </div>
+
+                <div class="text-end mt-4">
+                    <a asp-page="Index" class="btn btn-secondary me-2">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
     <script>
-        $(document).ready(function() {
-            $('#editForm').on('submit', function(event) {
-                if (!validateForm('editForm')) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-            });
-        });
+        function calcularTotal() {
+            var cantidad = parseFloat(document.getElementById('Adquisicion_Cantidad').value) || 0;
+            var valorUnitario = parseFloat(document.getElementById('Adquisicion_ValorUnitario').value) || 0;
+            var total = (cantidad * valorUnitario).toFixed(2);
+            document.getElementById('valorTotal').value = total;
+        }
+
+        document.getElementById('Adquisicion_Cantidad').addEventListener('input', calcularTotal);
+        document.getElementById('Adquisicion_ValorUnitario').addEventListener('input', calcularTotal);
+
+        // Calcular inicial
+        document.addEventListener('DOMContentLoaded', calcularTotal);
     </script>
 } 

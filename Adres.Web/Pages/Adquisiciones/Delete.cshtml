@@ -1,11 +1,11 @@
 @page "{id:int}"
 @model Adres.Web.Pages.Adquisiciones.DeleteModel
 @{
-    ViewData["Title"] = "Eliminar Adquisición";
+    ViewData["Title"] = "Desactivar Adquisición";
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="text-adres-primary"><i class="fas fa-shopping-cart"></i> Eliminar Adquisición</h1>
+    <h1 class="text-adres-primary"><i class="fas fa-power-off"></i> Desactivar Adquisición</h1>
     <a asp-page="Index" class="btn btn-secondary">
         <i class="fas fa-arrow-left"></i> Volver
     </a>
@@ -13,34 +13,47 @@
 
 <div class="row">
     <div class="col-md-8">
-        <div class="card card-adres">
+        <div class="card">
             <div class="card-body">
-                <div class="alert alert-danger" role="alert">
-                    <i class="fas fa-exclamation-triangle"></i> ¿Está seguro de que desea eliminar esta adquisición?
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> ¿Está seguro de que desea desactivar esta adquisición?
                 </div>
 
                 <dl class="row">
-                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Adquisicion.UnidadAdministrativa!.Nombre)</dt>
-                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Adquisicion.UnidadAdministrativa!.Nombre)</dd>
+                    <dt class="col-sm-4">Unidad Administrativa</dt>
+                    <dd class="col-sm-8">@Model.Adquisicion.UnidadAdministrativa?.Nombre</dd>
 
-                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Adquisicion.TipoBienServicio!.Descripcion)</dt>
-                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Adquisicion.TipoBienServicio!.Descripcion)</dd>
+                    <dt class="col-sm-4">Tipo de Bien/Servicio</dt>
+                    <dd class="col-sm-8">@Model.Adquisicion.TipoBienServicio?.Descripcion</dd>
 
-                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Adquisicion.Proveedor!.Nombre)</dt>
-                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Adquisicion.Proveedor!.Nombre)</dd>
+                    <dt class="col-sm-4">Proveedor</dt>
+                    <dd class="col-sm-8">@Model.Adquisicion.Proveedor?.Nombre</dd>
 
-                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Adquisicion.Presupuesto)</dt>
-                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Adquisicion.Presupuesto)</dd>
+                    <dt class="col-sm-4">Cantidad</dt>
+                    <dd class="col-sm-8">@Model.Adquisicion.Cantidad</dd>
 
-                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Adquisicion.Estado)</dt>
-                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Adquisicion.Estado)</dd>
+                    <dt class="col-sm-4">Valor Unitario</dt>
+                    <dd class="col-sm-8">@Model.Adquisicion.ValorUnitario.ToString("C")</dd>
+
+                    <dt class="col-sm-4">Valor Total</dt>
+                    <dd class="col-sm-8">@Model.Adquisicion.ValorTotal.ToString("C")</dd>
+
+                    <dt class="col-sm-4">Fecha de Adquisición</dt>
+                    <dd class="col-sm-8">@Model.Adquisicion.FechaAdquisicion.ToShortDateString()</dd>
+
+                    <dt class="col-sm-4">Estado</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge @(Model.Adquisicion.Estado.Equals("Activo", StringComparison.OrdinalIgnoreCase) ? "bg-success" : "bg-danger")">
+                            @Model.Adquisicion.Estado
+                        </span>
+                    </dd>
                 </dl>
 
                 <form method="post">
                     <input type="hidden" asp-for="Adquisicion.Id" />
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-trash"></i> Confirmar Eliminación
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-power-off"></i> Confirmar Desactivación
                         </button>
                     </div>
                 </form>

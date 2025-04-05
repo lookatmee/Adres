@@ -67,7 +67,7 @@
                             <label asp-for="Adquisicion.Presupuesto" class="form-label"></label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
-                                <input asp-for="Adquisicion.Presupuesto" class="form-control form-control-adres" required />
+                                <input asp-for="Adquisicion.Presupuesto" class="form-control form-control-adres" type="number" min="0.01" step="0.01" required />
                             </div>
                             <span asp-validation-for="Adquisicion.Presupuesto" class="text-danger"></span>
                             <div class="invalid-feedback">
@@ -89,7 +89,7 @@
                             <label asp-for="Adquisicion.ValorUnitario" class="form-label">Valor Unitario</label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
-                                <input asp-for="Adquisicion.ValorUnitario" class="form-control form-control-adres" type="number" min="0" step="0.01" required onchange="calcularValorTotal()" />
+                                <input asp-for="Adquisicion.ValorUnitario" class="form-control form-control-adres" type="number" min="0.01" step="0.01" required onchange="calcularValorTotal()" />
                             </div>
                             <span asp-validation-for="Adquisicion.ValorUnitario" class="text-danger"></span>
                             <div class="invalid-feedback">
@@ -118,19 +118,51 @@
 
 @section Scripts {
     <script>
+        function validarCamposNumericos() {
+            const presupuesto = parseFloat(document.getElementById('Adquisicion_Presupuesto').value) || 0;
+            const cantidad = parseFloat(document.getElementById('Adquisicion_Cantidad').value) || 0;
+            const valorUnitario = parseFloat(document.getElementById('Adquisicion_ValorUnitario').value) || 0;
+
+            if (presupuesto <= 0) {
+                document.getElementById('Adquisicion_Presupuesto').setCustomValidity('El presupuesto debe ser mayor a 0');
+            } else {
+                document.getElementById('Adquisicion_Presupuesto').setCustomValidity('');
+            }
+
+            if (cantidad <= 0) {
+                document.getElementById('Adquisicion_Cantidad').setCustomValidity('La cantidad debe ser mayor a 0');
+            } else {
+                document.getElementById('Adquisicion_Cantidad').setCustomValidity('');
+            }
+
+            if (valorUnitario <= 0) {
+                document.getElementById('Adquisicion_ValorUnitario').setCustomValidity('El valor unitario debe ser mayor a 0');
+            } else {
+                document.getElementById('Adquisicion_ValorUnitario').setCustomValidity('');
+            }
+        }
+
         function calcularValorTotal() {
             const cantidad = parseFloat(document.getElementById('Adquisicion_Cantidad').value) || 0;
             const valorUnitario = parseFloat(document.getElementById('Adquisicion_ValorUnitario').value) || 0;
             const valorTotal = cantidad * valorUnitario;
             document.getElementById('Adquisicion_ValorTotal').value = valorTotal.toFixed(2);
+            validarCamposNumericos();
         }
 
         $(document).ready(function() {
+            // Agregar validación a los campos numéricos
+            $('#Adquisicion_Presupuesto').on('input', validarCamposNumericos);
+            $('#Adquisicion_Cantidad').on('input', validarCamposNumericos);
+            $('#Adquisicion_ValorUnitario').on('input', validarCamposNumericos);
+
             $('#createForm').on('submit', function(event) {
-                if (!validateForm('createForm')) {
+                validarCamposNumericos();
+                if (!this.checkValidity()) {
                     event.preventDefault();
                     event.stopPropagation();
                 }
+                this.classList.add('was-validated');
             });
 
             // Calcular valor total inicial

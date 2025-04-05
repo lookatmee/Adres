@@ -1,6 +1,6 @@
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Adres.Web.Models;
 using Adres.Web.Services;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Adres.Web.Pages.Historial;
 
@@ -13,17 +13,19 @@ public class IndexModel : PageModel
         _apiService = apiService;
     }
 
-    public List<HistorialCambioDto> HistorialCambios { get; set; } = new();
+    public IEnumerable<HistorialCambioDto> HistorialCambios { get; set; }
 
     public async Task OnGetAsync()
     {
         try
         {
-            HistorialCambios = await _apiService.GetListAsync<HistorialCambioDto>("historial") ?? new();
+            HistorialCambios = await _apiService.GetAsync<IEnumerable<HistorialCambioDto>>("historial");
         }
         catch (Exception ex)
         {
-            TempData["Error"] = $"Error al cargar el historial: {ex.Message}";
+            // Manejar el error apropiadamente
+            HistorialCambios = Enumerable.Empty<HistorialCambioDto>();
+            ModelState.AddModelError("", "Error al cargar el historial de cambios.");
         }
     }
 } 

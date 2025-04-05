@@ -32,22 +32,10 @@ public class AdquisicionesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<object>>> GetAll()
+    public async Task<ActionResult<IEnumerable<AdquisicionDto>>> GetAll()
     {
         var adquisiciones = await _adquisicionService.GetAllAsync();
-        var result = adquisiciones.Select(a => new
-        {
-            a.Id,
-            a.Cantidad,
-            a.ValorUnitario,
-            a.ValorTotal,
-            a.FechaAdquisicion,
-            a.Estado,
-            UnidadAdministrativa = new { a.UnidadAdministrativa.Id, a.UnidadAdministrativa.Nombre },
-            TipoBienServicio = new { a.TipoBienServicio.Id, a.TipoBienServicio.Descripcion },
-            Proveedor = new { a.Proveedor.Id, a.Proveedor.Nombre }
-        });
-        return Ok(result);
+        return Ok(adquisiciones);
     }
 
     [HttpGet("buscar")]

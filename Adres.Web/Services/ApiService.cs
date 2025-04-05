@@ -10,6 +10,7 @@ public interface IApiService
     Task<T?> PostAsync<T>(string endpoint, object data);
     Task<T?> PutAsync<T>(string endpoint, object data);
     Task<bool> DeleteAsync(string endpoint);
+    Task PatchAsync(string endpoint);
 }
 
 public class ApiService : IApiService
@@ -56,17 +57,55 @@ public class ApiService : IApiService
 
     public async Task<T?> PutAsync<T>(string endpoint, object data)
     {
-        var json = JsonSerializer.Serialize(data);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PutAsync(endpoint, content);
-        response.EnsureSuccessStatusCode();
-        var responseContent = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<T>(responseContent, _jsonOptions);
+        try
+        {
+            var json = JsonSerializer.Serialize(data);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync(endpoint, content);
+            
+            response.EnsureSuccessStatusCode();
+            
+            if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                return default;
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<T>(responseContent, _jsonOptions);
+        }
+        catch (HttpRequestException ex)
+        {
+            throw new Exception($"Error en la petición HTTP: {ex.Message}", ex);
+        }
+        catch (JsonException ex)
+        {
+            throw new Exception($"Error al procesar la respuesta JSON: {ex.Message}", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error inesperado: {ex.Message}", ex);
+        }
     }
 
     public async Task<bool> DeleteAsync(string endpoint)
     {
         var response = await _httpClient.DeleteAsync(endpoint);
         return response.IsSuccessStatusCode;
+    }
+
+    public async Task PatchAsync(string endpoint)
+    {
+        try
+        {
+            var request = new HttpRequestMessage(HttpMethod.Patch, endpoint);
+            var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (HttpRequestException ex)
+        {
+            throw new Exception($"Error en la petición HTTP: {ex.Message}", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error inesperado: {ex.Message}", ex);
+        }
     }
 } 

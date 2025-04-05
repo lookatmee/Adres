@@ -52,6 +52,7 @@ builder.Services.AddScoped<IUnidadAdministrativaService, UnidadAdministrativaSer
 builder.Services.AddScoped<ITipoBienServicioService, TipoBienServicioService>();
 builder.Services.AddScoped<IProveedorService, ProveedorService>();
 builder.Services.AddScoped<IDocumentacionService, DocumentacionService>();
+builder.Services.AddScoped<IHistorialService, HistorialService>();
 
 var app = builder.Build();
 

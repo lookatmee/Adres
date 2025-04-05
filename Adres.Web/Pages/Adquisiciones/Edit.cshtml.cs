@@ -3,6 +3,7 @@ using Adres.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Text.Json;
 
 namespace Adres.Web.Pages.Adquisiciones;
 
@@ -16,38 +17,42 @@ public class EditModel : PageModel
     }
 
     [BindProperty]
-    public AdquisicionDto Adquisicion { get; set; } = new();
+    public UpdateAdquisicionDto Adquisicion { get; set; }
 
-    public SelectList UnidadesAdministrativas { get; set; } = default!;
-    public SelectList TiposBienesServicios { get; set; } = default!;
-    public SelectList Proveedores { get; set; } = default!;
+    public SelectList UnidadesAdministrativas { get; set; }
+    public SelectList TiposBienesServicios { get; set; }
+    public SelectList Proveedores { get; set; }
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        try
+        try 
         {
+            await CargarListasSeleccion();
+
             var adquisicion = await _apiService.GetAsync<AdquisicionDto>($"adquisiciones/{id}");
             if (adquisicion == null)
             {
                 return NotFound();
             }
 
-            Adquisicion = adquisicion;
-
-            var unidades = await _apiService.GetListAsync<UnidadAdministrativaDto>("unidadesadministrativas") ?? new();
-            var tipos = await _apiService.GetListAsync<TipoBienServicioDto>("tiposbienes") ?? new();
-            var proveedores = await _apiService.GetListAsync<ProveedorDto>("proveedores") ?? new();
-
-            UnidadesAdministrativas = new SelectList(unidades, "Id", "Nombre");
-            TiposBienesServicios = new SelectList(tipos, "Id", "Descripcion");
-            Proveedores = new SelectList(proveedores, "Id", "Nombre");
+            Adquisicion = new UpdateAdquisicionDto
+            {
+                Id = adquisicion.Id,
+                UnidadAdministrativaId = adquisicion.UnidadAdministrativaId,
+                TipoBienServicioId = adquisicion.TipoBienServicioId,
+                ProveedorId = adquisicion.ProveedorId,
+                Cantidad = adquisicion.Cantidad,
+                ValorUnitario = adquisicion.ValorUnitario,
+                FechaAdquisicion = adquisicion.FechaAdquisicion,
+                Estado = adquisicion.Estado
+            };
 
             return Page();
         }
         catch (Exception ex)
         {
-            TempData["Error"] = $"Error al cargar la adquisición: {ex.Message}";
-            return RedirectToPage("./Index");
+            ModelState.AddModelError("", $"Error al cargar la adquisición: {ex.Message}");
+            return Page();
         }
     }
 
@@ -55,32 +60,41 @@ public class EditModel : PageModel
     {
         if (!ModelState.IsValid)
         {
-            await LoadSelectLists();
+            await CargarListasSeleccion();
             return Page();
         }
 
         try
         {
-            await _apiService.PutAsync<AdquisicionDto>($"adquisiciones/{Adquisicion.Id}", Adquisicion);
-            TempData["Success"] = "Adquisición actualizada exitosamente";
+            await _apiService.PutAsync<UpdateAdquisicionDto>($"adquisiciones/{Adquisicion.Id}", Adquisicion);
             return RedirectToPage("./Index");
         }
         catch (Exception ex)
         {
-            await LoadSelectLists();
-            ModelState.AddModelError(string.Empty, $"Error al actualizar la adquisición: {ex.Message}");
+            // Extraer el mensaje más relevante
+            var mensaje = ex.InnerException?.Message ?? ex.Message;
+            ModelState.AddModelError("", $"Error al actualizar la adquisición: {mensaje}");
+            await CargarListasSeleccion();
             return Page();
         }
     }
 
-    private async Task LoadSelectLists()
+    private async Task CargarListasSeleccion()
     {
-        var unidades = await _apiService.GetListAsync<UnidadAdministrativaDto>("unidadesadministrativas") ?? new();
-        var tipos = await _apiService.GetListAsync<TipoBienServicioDto>("tiposbienes") ?? new();
-        var proveedores = await _apiService.GetListAsync<ProveedorDto>("proveedores") ?? new();
+        try
+        {
+            var unidades = await _apiService.GetAsync<IEnumerable<UnidadAdministrativaDto>>("unidadadministrativa");
+            UnidadesAdministrativas = new SelectList(unidades, "Id", "Nombre");
 
-        UnidadesAdministrativas = new SelectList(unidades, "Id", "Nombre");
-        TiposBienesServicios = new SelectList(tipos, "Id", "Descripcion");
-        Proveedores = new SelectList(proveedores, "Id", "Nombre");
+            var tipos = await _apiService.GetAsync<IEnumerable<TipoBienServicioDto>>("tipobienservicio");
+            TiposBienesServicios = new SelectList(tipos, "Id", "Descripcion");
+
+            var proveedores = await _apiService.GetAsync<IEnumerable<ProveedorDto>>("proveedor");
+            Proveedores = new SelectList(proveedores, "Id", "Nombre");
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("", $"Error al cargar las listas: {ex.Message}");
+        }
     }
 } 

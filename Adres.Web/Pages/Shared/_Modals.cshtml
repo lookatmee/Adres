@@ -1,0 +1,90 @@
+<!-- Modal de Éxito -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="successModalLabel">
+                    <i class="fas fa-check-circle"></i> Operación Exitosa
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="successMessage">La operación se ha completado exitosamente.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmación -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title" id="confirmModalLabel">
+                    <i class="fas fa-exclamation-triangle"></i> Confirmar Acción
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">¿Está seguro que desea realizar esta acción?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirmButton">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Eliminación -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="fas fa-trash-alt"></i> Confirmar Eliminación
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="deleteMessage">¿Está seguro que desea eliminar este registro?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="deleteButton">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts para los modales -->
+<script>
+    function showSuccessModal(message) {
+        document.getElementById('successMessage').textContent = message || 'La operación se ha completado exitosamente.';
+        var modal = new bootstrap.Modal(document.getElementById('successModal'));
+        modal.show();
+    }
+
+    function showConfirmModal(message, callback) {
+        document.getElementById('confirmMessage').textContent = message;
+        var modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        document.getElementById('confirmButton').onclick = function() {
+            modal.hide();
+            if (callback) callback();
+        };
+        modal.show();
+    }
+
+    function showDeleteModal(message, callback) {
+        document.getElementById('deleteMessage').textContent = message;
+        var modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        document.getElementById('deleteButton').onclick = function() {
+            modal.hide();
+            if (callback) callback();
+        };
+        modal.show();
+    }
+</script> 

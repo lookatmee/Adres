@@ -41,21 +41,13 @@ public class DeleteModel : PageModel
     {
         try
         {
-            var result = await _apiService.DeleteAsync($"adquisiciones/{Adquisicion.Id}");
-            if (result)
-            {
-                TempData["Success"] = "Adquisición eliminada exitosamente";
-                return RedirectToPage("./Index");
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "No se pudo eliminar la adquisición");
-                return Page();
-            }
+            await _apiService.PatchAsync($"adquisiciones/{Adquisicion.Id}/desactivar");
+            TempData["Success"] = "Adquisición desactivada exitosamente";
+            return RedirectToPage("./Index");
         }
         catch (Exception ex)
         {
-            ModelState.AddModelError(string.Empty, $"Error al eliminar la adquisición: {ex.Message}");
+            ModelState.AddModelError(string.Empty, $"Error al desactivar la adquisición: {ex.Message}");
             return Page();
         }
     }
