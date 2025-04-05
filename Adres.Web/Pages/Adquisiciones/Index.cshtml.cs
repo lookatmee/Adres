@@ -15,62 +15,69 @@ public class IndexModel : PageModel
         _apiService = apiService;
     }
 
-    [BindProperty(SupportsGet = true)]
-    public FiltroAdquisicion Filtro { get; set; } = new();
+    public IEnumerable<AdquisicionDto> Adquisiciones { get; set; } = new List<AdquisicionDto>();
+    public SelectList UnidadesAdministrativas { get; set; }
+    public SelectList TiposBienesServicios { get; set; }
+    public SelectList Proveedores { get; set; }
 
-    public List<AdquisicionDto> Adquisiciones { get; set; } = new();
-    public SelectList UnidadesLista { get; set; } = null!;
-    public SelectList ProveedoresLista { get; set; } = null!;
-    public SelectList TiposLista { get; set; } = null!;
+    [BindProperty(SupportsGet = true)]
+    public int? UnidadAdministrativaId { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public int? TipoBienServicioId { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public int? ProveedorId { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public string? Estado { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public DateTime? FechaDesde { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public DateTime? FechaHasta { get; set; }
 
     public async Task OnGetAsync()
     {
-        try
-        {
-            // Cargar listas para los filtros
-            var unidades = await _apiService.GetListAsync<UnidadAdministrativaDto>("unidades") ?? new List<UnidadAdministrativaDto>();
-            var proveedores = await _apiService.GetListAsync<ProveedorDto>("proveedores") ?? new List<ProveedorDto>();
-            var tipos = await _apiService.GetListAsync<TipoBienServicioDto>("tiposbienes") ?? new List<TipoBienServicioDto>();
-
-            UnidadesLista = new SelectList(unidades, "Id", "Nombre");
-            ProveedoresLista = new SelectList(proveedores, "Id", "Nombre");
-            TiposLista = new SelectList(tipos, "Id", "Descripcion");
-
-            // Construir la URL con los filtros
-            var queryString = BuildQueryString();
-            
-            // Obtener adquisiciones filtradas
-            Adquisiciones = await _apiService.GetListAsync<AdquisicionDto>($"adquisiciones{queryString}") ?? new List<AdquisicionDto>();
-        }
-        catch (Exception ex)
-        {
-            TempData["Error"] = $"Error al cargar las adquisiciones: {ex.Message}";
-        }
+        await CargarListasSeleccion();
+        await CargarAdquisiciones();
     }
 
-    private string BuildQueryString()
+    private async Task CargarListasSeleccion()
     {
+        var unidades = await _apiService.GetAsync<IEnumerable<UnidadAdministrativaDto>>("unidadadministrativa");
+        UnidadesAdministrativas = new SelectList(unidades, "Id", "Nombre");
+
+        var tipos = await _apiService.GetAsync<IEnumerable<TipoBienServicioDto>>("tipobienservicio");
+        TiposBienesServicios = new SelectList(tipos, "Id", "Descripcion");
+
+        var proveedores = await _apiService.GetAsync<IEnumerable<ProveedorDto>>("proveedor");
+        Proveedores = new SelectList(proveedores, "Id", "Nombre");
+    }
+
+    private async Task CargarAdquisiciones()
+    {
+        var endpoint = "adquisiciones";
         var queryParams = new List<string>();
 
-        if (Filtro.UnidadId.HasValue)
-            queryParams.Add($"unidadId={Filtro.UnidadId}");
-        
-        if (Filtro.ProveedorId.HasValue)
-            queryParams.Add($"proveedorId={Filtro.ProveedorId}");
-        
-        if (Filtro.TipoId.HasValue)
-            queryParams.Add($"tipoId={Filtro.TipoId}");
-        
-        if (!string.IsNullOrEmpty(Filtro.Estado))
-            queryParams.Add($"estado={Filtro.Estado}");
-        
-        if (Filtro.FechaDesde.HasValue)
-            queryParams.Add($"fechaDesde={Filtro.FechaDesde:yyyy-MM-dd}");
-        
-        if (Filtro.FechaHasta.HasValue)
-            queryParams.Add($"fechaHasta={Filtro.FechaHasta:yyyy-MM-dd}");
+        if (UnidadAdministrativaId.HasValue)
+            queryParams.Add($"unidadId={UnidadAdministrativaId}");
+        if (TipoBienServicioId.HasValue)
+            queryParams.Add($"tipoId={TipoBienServicioId}");
+        if (ProveedorId.HasValue)
+            queryParams.Add($"proveedorId={ProveedorId}");
+        if (!string.IsNullOrEmpty(Estado))
+            queryParams.Add($"estado={Estado}");
+        if (FechaDesde.HasValue)
+            queryParams.Add($"fechaDesde={FechaDesde:yyyy-MM-dd}");
+        if (FechaHasta.HasValue)
+            queryParams.Add($"fechaHasta={FechaHasta:yyyy-MM-dd}");
 
-        return queryParams.Any() ? "?" + string.Join("&", queryParams) : string.Empty;
+        if (queryParams.Any())
+            endpoint += "?" + string.Join("&", queryParams);
+
+        Adquisiciones = await _apiService.GetAsync<IEnumerable<AdquisicionDto>>(endpoint);
     }
 }
 

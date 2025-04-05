@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Adres.Application.DTOs;
 using Adres.Application.Services;
+using Adres.Domain.Entities;
 
 namespace Adres.API.Controllers;
 
@@ -31,10 +32,22 @@ public class AdquisicionesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<AdquisicionDto>>> GetAll()
+    public async Task<ActionResult<IEnumerable<object>>> GetAll()
     {
         var adquisiciones = await _adquisicionService.GetAllAsync();
-        return Ok(adquisiciones);
+        var result = adquisiciones.Select(a => new
+        {
+            a.Id,
+            a.Cantidad,
+            a.ValorUnitario,
+            a.ValorTotal,
+            a.FechaAdquisicion,
+            a.Estado,
+            UnidadAdministrativa = new { a.UnidadAdministrativa.Id, a.UnidadAdministrativa.Nombre },
+            TipoBienServicio = new { a.TipoBienServicio.Id, a.TipoBienServicio.Descripcion },
+            Proveedor = new { a.Proveedor.Id, a.Proveedor.Nombre }
+        });
+        return Ok(result);
     }
 
     [HttpPut("{id}")]

@@ -8,14 +8,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Adquisicion, AdquisicionDto>()
-            .ForMember(d => d.UnidadAdministrativaNombre, 
-                opt => opt.MapFrom(s => s.UnidadAdministrativa.Nombre))
-            .ForMember(d => d.TipoBienServicioDescripcion, 
-                opt => opt.MapFrom(s => s.TipoBienServicio.Descripcion))
-            .ForMember(d => d.ProveedorNombre, 
-                opt => opt.MapFrom(s => s.Proveedor.Nombre));
-
+        CreateMap<Adquisicion, AdquisicionDto>();
         CreateMap<CreateAdquisicionDto, Adquisicion>();
         CreateMap<UpdateAdquisicionDto, Adquisicion>();
 
@@ -32,6 +25,6 @@ public class MappingProfile : Profile
         CreateMap<UpdateProveedorDto, Proveedor>();
 
         CreateMap<Documentacion, DocumentacionDto>();
-        CreateMap<CreateDocumentacionDto, Documentacion>();
+        CreateMap<HistorialCambios, HistorialCambioDto>();
     }
 } 

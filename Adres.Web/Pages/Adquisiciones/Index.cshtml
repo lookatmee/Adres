@@ -4,144 +4,158 @@
     ViewData["Title"] = "Adquisiciones";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h1 class="text-adres-primary">@ViewData["Title"]</h1>
-    </div>
-    <div>
-        <a asp-page="/Index" class="btn btn-outline-secondary me-2">
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="mt-4">Adquisiciones</h1>
+        <a asp-page="/Index" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Volver
         </a>
-        <a asp-page="Create" class="btn btn-adres-primary">
-            <i class="fas fa-plus"></i> Nueva Adquisición
-        </a>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <i class="fas fa-table me-1"></i>
+                Listado de Adquisiciones
+            </div>
+            <a asp-page="Create" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Nueva Adquisición
+            </a>
+        </div>
+        <div class="card-body">
+            <form id="searchForm" method="get" class="mb-4">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label asp-for="UnidadAdministrativaId" class="form-label">Unidad Administrativa</label>
+                        <select asp-for="UnidadAdministrativaId" asp-items="Model.UnidadesAdministrativas" class="form-select">
+                            <option value="">Todas</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="TipoBienServicioId" class="form-label">Tipo de Bien/Servicio</label>
+                        <select asp-for="TipoBienServicioId" asp-items="Model.TiposBienesServicios" class="form-select">
+                            <option value="">Todos</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="ProveedorId" class="form-label">Proveedor</label>
+                        <select asp-for="ProveedorId" asp-items="Model.Proveedores" class="form-select">
+                            <option value="">Todos</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Estado" class="form-label">Estado</label>
+                        <select asp-for="Estado" class="form-select">
+                            <option value="">Todos</option>
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="FechaDesde" class="form-label">Fecha Desde</label>
+                        <input asp-for="FechaDesde" type="date" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="FechaHasta" class="form-label">Fecha Hasta</label>
+                        <input asp-for="FechaHasta" type="date" class="form-control">
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="fas fa-search"></i> Buscar
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="limpiarFiltros()">
+                            <i class="fas fa-eraser"></i> Limpiar
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Unidad Administrativa</th>
+                            <th>Tipo de Bien/Servicio</th>
+                            <th>Proveedor</th>
+                            <th>Cantidad</th>
+                            <th>Valor Unitario</th>
+                            <th>Valor Total</th>
+                            <th>Fecha Adquisición</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Adquisiciones != null && Model.Adquisiciones.Any())
+                        {
+                            @foreach (var item in Model.Adquisiciones)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.UnidadAdministrativa.Nombre</td>
+                                    <td>@item.TipoBienServicio.Descripcion</td>
+                                    <td>@item.Proveedor.Nombre</td>
+                                    <td>@item.Cantidad</td>
+                                    <td>@item.ValorUnitario.ToString("C")</td>
+                                    <td>@item.ValorTotal.ToString("C")</td>
+                                    <td>@item.FechaAdquisicion.ToShortDateString()</td>
+                                    <td>
+                                        <span class="badge @(item.Estado == "activo" ? "bg-success" : "bg-danger")">
+                                            @(item.Estado == "activo" ? "Activo" : "Inactivo")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" title="Eliminar">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="10" class="text-center">No se encontraron adquisiciones</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
-
-<div class="card card-adres mb-4">
-    <div class="card-header">
-        <h5 class="mb-0">Filtros de Búsqueda</h5>
-    </div>
-    <div class="card-body">
-        <form method="get" class="row g-3">
-            <div class="col-md-3">
-                <label asp-for="Filtro.UnidadId" class="form-label">Unidad Administrativa</label>
-                <select asp-for="Filtro.UnidadId" asp-items="Model.UnidadesLista" class="form-control form-control-adres">
-                    <option value="">Todas</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label asp-for="Filtro.ProveedorId" class="form-label">Proveedor</label>
-                <select asp-for="Filtro.ProveedorId" asp-items="Model.ProveedoresLista" class="form-control form-control-adres">
-                    <option value="">Todos</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label asp-for="Filtro.TipoId" class="form-label">Tipo de Bien/Servicio</label>
-                <select asp-for="Filtro.TipoId" asp-items="Model.TiposLista" class="form-control form-control-adres">
-                    <option value="">Todos</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label asp-for="Filtro.Estado" class="form-label">Estado</label>
-                <select asp-for="Filtro.Estado" class="form-control form-control-adres">
-                    <option value="">Todos</option>
-                    <option value="activo">Activo</option>
-                    <option value="inactivo">Inactivo</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label asp-for="Filtro.FechaDesde" class="form-label">Fecha Desde</label>
-                <input type="date" asp-for="Filtro.FechaDesde" class="form-control form-control-adres">
-            </div>
-            <div class="col-md-3">
-                <label asp-for="Filtro.FechaHasta" class="form-label">Fecha Hasta</label>
-                <input type="date" asp-for="Filtro.FechaHasta" class="form-control form-control-adres">
-            </div>
-            <div class="col-12">
-                <button type="submit" class="btn btn-adres-primary">
-                    <i class="fas fa-search"></i> Buscar
-                </button>
-                <a asp-page="./Index" class="btn btn-secondary">
-                    <i class="fas fa-undo"></i> Limpiar
-                </a>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="table-responsive">
-    <table class="table table-hover table-adres">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Unidad Administrativa</th>
-                <th>Tipo</th>
-                <th>Proveedor</th>
-                <th>Fecha</th>
-                <th>Presupuesto</th>
-                <th>Valor Total</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Adquisiciones)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.UnidadAdministrativa?.Nombre</td>
-                    <td>@item.TipoBienServicio?.Descripcion</td>
-                    <td>@item.Proveedor?.Nombre</td>
-                    <td>@item.FechaAdquisicion.ToShortDateString()</td>
-                    <td>@item.Presupuesto.ToString("C0")</td>
-                    <td>@item.ValorTotal.ToString("C0")</td>
-                    <td>
-                        <span class="badge @(item.Estado == "activo" ? "bg-success" : "bg-danger")">
-                            @item.Estado
-                        </span>
-                    </td>
-                    <td>
-                        <div class="btn-group" role="group">
-                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-adres-secondary" data-bs-toggle="tooltip" title="Editar">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Detalles">
-                                <i class="fas fa-info-circle"></i>
-                            </a>
-                            <button type="button" class="btn btn-sm btn-danger" onclick="confirmarEliminacion(@item.Id)" data-bs-toggle="tooltip" title="Eliminar">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
-@if (!Model.Adquisiciones.Any())
-{
-    <div class="alert alert-info text-center">
-        <i class="fas fa-info-circle fa-2x mb-3"></i>
-        <p class="mb-0">No se encontraron adquisiciones con los filtros seleccionados.</p>
-    </div>
-}
 
 @section Scripts {
     <script>
-        function confirmarEliminacion(id) {
-            confirmAction('¿Eliminar adquisición?', '¿Está seguro de que desea eliminar esta adquisición?')
-                .then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = `/Adquisiciones/Delete?id=${id}`;
-                    }
-                });
+        function limpiarFiltros() {
+            document.getElementById('UnidadAdministrativaId').value = '';
+            document.getElementById('TipoBienServicioId').value = '';
+            document.getElementById('ProveedorId').value = '';
+            document.getElementById('Estado').value = '';
+            document.getElementById('FechaDesde').value = '';
+            document.getElementById('FechaHasta').value = '';
+            document.getElementById('searchForm').submit();
         }
 
-        $(document).ready(function() {
-            // Inicializar tooltips
-            initTooltips();
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            var fechaDesde = document.getElementById('FechaDesde').value;
+            var fechaHasta = document.getElementById('FechaHasta').value;
+
+            if (fechaDesde && fechaHasta && new Date(fechaDesde) > new Date(fechaHasta)) {
+                e.preventDefault();
+                alert('La fecha desde no puede ser mayor que la fecha hasta');
+            }
+        });
+
+        // Inicializar tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
         });
     </script>
 } 

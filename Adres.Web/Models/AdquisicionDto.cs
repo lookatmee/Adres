@@ -14,14 +14,17 @@ public class AdquisicionDto
     [Required(ErrorMessage = "La unidad administrativa es requerida")]
     [Display(Name = "Unidad Administrativa")]
     public int UnidadAdministrativaId { get; set; }
+    public UnidadAdministrativaDto? UnidadAdministrativa { get; set; }
 
     [Required(ErrorMessage = "El tipo de bien/servicio es requerido")]
     [Display(Name = "Tipo de Bien/Servicio")]
     public int TipoBienServicioId { get; set; }
+    public TipoBienServicioDto? TipoBienServicio { get; set; }
 
     [Required(ErrorMessage = "El proveedor es requerido")]
     [Display(Name = "Proveedor")]
     public int ProveedorId { get; set; }
+    public ProveedorDto? Proveedor { get; set; }
 
     [Required(ErrorMessage = "La cantidad es requerida")]
     [Range(1, int.MaxValue, ErrorMessage = "La cantidad debe ser mayor a 0")]
@@ -29,7 +32,7 @@ public class AdquisicionDto
     public int Cantidad { get; set; }
 
     [Required(ErrorMessage = "El valor unitario es requerido")]
-    [Range(0.01, double.MaxValue, ErrorMessage = "El valor unitario debe ser mayor a 0")]
+    [Range(1, double.MaxValue, ErrorMessage = "El valor unitario debe ser mayor a 0")]
     [Display(Name = "Valor Unitario")]
     public decimal ValorUnitario { get; set; }
 
@@ -39,10 +42,10 @@ public class AdquisicionDto
     [Display(Name = "Estado")]
     public string Estado { get; set; } = "activo";
 
-    public UnidadAdministrativaDto? UnidadAdministrativa { get; set; }
-    public TipoBienServicioDto? TipoBienServicio { get; set; }
-    public ProveedorDto? Proveedor { get; set; }
-    public DateTime FechaAdquisicion { get; set; } = DateTime.Now;
+    [Required(ErrorMessage = "La fecha de adquisición es requerida")]
+    [Display(Name = "Fecha de Adquisición")]
+    [DataType(DataType.Date)]
+    public DateTime FechaAdquisicion { get; set; } = DateTime.Today;
 
     public string UnidadAdministrativaNombre { get; set; } = string.Empty;
     public string TipoBienServicioDescripcion { get; set; } = string.Empty;
@@ -79,5 +82,12 @@ public class UnidadAdministrativaDto
 public class TipoBienServicioDto
 {
     public int Id { get; set; }
+    public string Nombre { get; set; } = string.Empty;
     public string Descripcion { get; set; } = string.Empty;
+}
+
+public class ProveedorDto
+{
+    public int Id { get; set; }
+    public string Nombre { get; set; } = string.Empty;
 } 

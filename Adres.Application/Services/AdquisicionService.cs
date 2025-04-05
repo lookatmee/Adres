@@ -2,6 +2,7 @@ using AutoMapper;
 using Adres.Domain.Entities;
 using Adres.Application.DTOs;
 using Adres.Domain.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace Adres.Application.Services;
 
@@ -41,24 +42,45 @@ public class AdquisicionService : IAdquisicionService
         
         await RegistrarHistorial(result.Id, "Creación", "", "Nueva adquisición", usuario);
 
+        // Cargar las relaciones antes de mapear al DTO
+        result = await _adquisicionRepository.GetQueryable()
+            .Include(a => a.UnidadAdministrativa)
+            .Include(a => a.TipoBienServicio)
+            .Include(a => a.Proveedor)
+            .FirstOrDefaultAsync(a => a.Id == result.Id);
+
         return _mapper.Map<AdquisicionDto>(result);
     }
 
     public async Task<AdquisicionDto> GetByIdAsync(int id)
     {
-        var adquisicion = await _adquisicionRepository.GetByIdAsync(id);
+        var adquisicion = await _adquisicionRepository.GetQueryable()
+            .Include(a => a.UnidadAdministrativa)
+            .Include(a => a.TipoBienServicio)
+            .Include(a => a.Proveedor)
+            .FirstOrDefaultAsync(a => a.Id == id);
+
         return _mapper.Map<AdquisicionDto>(adquisicion);
     }
 
     public async Task<IEnumerable<AdquisicionDto>> GetAllAsync()
     {
-        var adquisiciones = await _adquisicionRepository.GetAllAsync();
+        var adquisiciones = await _adquisicionRepository.GetQueryable()
+            .Include(a => a.UnidadAdministrativa)
+            .Include(a => a.TipoBienServicio)
+            .Include(a => a.Proveedor)
+            .ToListAsync();
+
         return _mapper.Map<IEnumerable<AdquisicionDto>>(adquisiciones);
     }
 
     public async Task UpdateAsync(int id, UpdateAdquisicionDto updateDto, string usuario)
     {
-        var adquisicion = await _adquisicionRepository.GetByIdAsync(id);
+        var adquisicion = await _adquisicionRepository.GetQueryable()
+            .Include(a => a.UnidadAdministrativa)
+            .Include(a => a.TipoBienServicio)
+            .Include(a => a.Proveedor)
+            .FirstOrDefaultAsync(a => a.Id == id);
         
         // Guardar valores anteriores para el historial
         var valorAnterior = System.Text.Json.JsonSerializer.Serialize(adquisicion);
