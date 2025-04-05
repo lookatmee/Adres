@@ -23,19 +23,29 @@ public class AdquisicionDto
     [Display(Name = "Proveedor")]
     public int ProveedorId { get; set; }
 
+    [Required(ErrorMessage = "La cantidad es requerida")]
+    [Range(1, int.MaxValue, ErrorMessage = "La cantidad debe ser mayor a 0")]
+    [Display(Name = "Cantidad")]
+    public int Cantidad { get; set; }
+
+    [Required(ErrorMessage = "El valor unitario es requerido")]
+    [Range(0.01, double.MaxValue, ErrorMessage = "El valor unitario debe ser mayor a 0")]
+    [Display(Name = "Valor Unitario")]
+    public decimal ValorUnitario { get; set; }
+
+    [Display(Name = "Valor Total")]
+    public decimal ValorTotal { get; set; }
+
     [Display(Name = "Estado")]
     public string Estado { get; set; } = "activo";
 
     public UnidadAdministrativaDto? UnidadAdministrativa { get; set; }
     public TipoBienServicioDto? TipoBienServicio { get; set; }
     public ProveedorDto? Proveedor { get; set; }
+    public DateTime FechaAdquisicion { get; set; } = DateTime.Now;
 
     public string UnidadAdministrativaNombre { get; set; } = string.Empty;
     public string TipoBienServicioDescripcion { get; set; } = string.Empty;
-    public int Cantidad { get; set; }
-    public decimal ValorUnitario { get; set; }
-    public decimal ValorTotal { get; set; }
-    public DateTime FechaAdquisicion { get; set; }
     public List<DocumentacionDto> Documentaciones { get; set; } = new();
     public List<HistorialCambioDto> HistorialCambios { get; set; } = new();
 }

@@ -26,9 +26,9 @@ public class CreateModel : PageModel
     {
         try
         {
-            var unidades = await _apiService.GetListAsync<UnidadAdministrativaDto>("unidadesadministrativas") ?? new();
-            var tipos = await _apiService.GetListAsync<TipoBienServicioDto>("tiposbienes") ?? new();
-            var proveedores = await _apiService.GetListAsync<ProveedorDto>("proveedores") ?? new();
+            var unidades = await _apiService.GetListAsync<UnidadAdministrativaDto>("unidadadministrativa") ?? new();
+            var tipos = await _apiService.GetListAsync<TipoBienServicioDto>("tipobienservicio") ?? new();
+            var proveedores = await _apiService.GetListAsync<ProveedorDto>("proveedor") ?? new();
 
             UnidadesAdministrativas = new SelectList(unidades, "Id", "Nombre");
             TiposBienesServicios = new SelectList(tipos, "Id", "Descripcion");
@@ -50,6 +50,9 @@ public class CreateModel : PageModel
 
         try
         {
+            // Calcular el valor total antes de enviar
+            Adquisicion.ValorTotal = Adquisicion.Cantidad * Adquisicion.ValorUnitario;
+            
             await _apiService.PostAsync<AdquisicionDto>("adquisiciones", Adquisicion);
             TempData["Success"] = "Adquisición creada exitosamente";
             return RedirectToPage("./Index");

@@ -53,6 +53,17 @@
                             </div>
                         </div>
                         <div class="col-md-6">
+                            <label asp-for="Adquisicion.FechaAdquisicion" class="form-label">Fecha de Adquisición</label>
+                            <input asp-for="Adquisicion.FechaAdquisicion" type="date" class="form-control form-control-adres" required />
+                            <span asp-validation-for="Adquisicion.FechaAdquisicion" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                La fecha de adquisición es requerida.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
                             <label asp-for="Adquisicion.Presupuesto" class="form-label"></label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
@@ -61,6 +72,35 @@
                             <span asp-validation-for="Adquisicion.Presupuesto" class="text-danger"></span>
                             <div class="invalid-feedback">
                                 El presupuesto es requerido y debe ser mayor a 0.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label asp-for="Adquisicion.Cantidad" class="form-label">Cantidad</label>
+                            <input asp-for="Adquisicion.Cantidad" class="form-control form-control-adres" type="number" min="1" required onchange="calcularValorTotal()" />
+                            <span asp-validation-for="Adquisicion.Cantidad" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                La cantidad es requerida y debe ser mayor a 0.
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Adquisicion.ValorUnitario" class="form-label">Valor Unitario</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="Adquisicion.ValorUnitario" class="form-control form-control-adres" type="number" min="0" step="0.01" required onchange="calcularValorTotal()" />
+                            </div>
+                            <span asp-validation-for="Adquisicion.ValorUnitario" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                El valor unitario es requerido y debe ser mayor a 0.
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Adquisicion.ValorTotal" class="form-label">Valor Total</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="Adquisicion.ValorTotal" class="form-control form-control-adres" readonly />
                             </div>
                         </div>
                     </div>
@@ -78,6 +118,13 @@
 
 @section Scripts {
     <script>
+        function calcularValorTotal() {
+            const cantidad = parseFloat(document.getElementById('Adquisicion_Cantidad').value) || 0;
+            const valorUnitario = parseFloat(document.getElementById('Adquisicion_ValorUnitario').value) || 0;
+            const valorTotal = cantidad * valorUnitario;
+            document.getElementById('Adquisicion_ValorTotal').value = valorTotal.toFixed(2);
+        }
+
         $(document).ready(function() {
             $('#createForm').on('submit', function(event) {
                 if (!validateForm('createForm')) {
@@ -85,6 +132,14 @@
                     event.stopPropagation();
                 }
             });
+
+            // Calcular valor total inicial
+            calcularValorTotal();
+
+            // Establecer la fecha actual como valor predeterminado
+            if (!$('#Adquisicion_FechaAdquisicion').val()) {
+                $('#Adquisicion_FechaAdquisicion').val(new Date().toISOString().split('T')[0]);
+            }
         });
     </script>
 } 
