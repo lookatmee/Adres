@@ -37,9 +37,33 @@
                             <tr>
                                 <td>@cambio.FechaCambio.ToString("dd/MM/yyyy HH:mm")</td>
                                 <td>@cambio.AdquisicionId</td>
-                                <td>@cambio.CampoModificado</td>
-                                <td>@cambio.ValorAnterior</td>
-                                <td>@cambio.ValorNuevo</td>
+                                <td>
+                                    <span class="badge @(cambio.CampoModificado == "Estado" ? "bg-warning" : "bg-info")">
+                                        @cambio.CampoModificado
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (cambio.CampoModificado == "Estado")
+                                    {
+                                        <span class="badge bg-secondary">@cambio.ValorAnterior</span>
+                                    }
+                                    else
+                                    {
+                                        <pre class="json-formato">@Model.FormatearJson(cambio.ValorAnterior)</pre>
+                                    }
+                                </td>
+                                <td>
+                                    @if (cambio.CampoModificado == "Estado")
+                                    {
+                                        <span class="badge @(cambio.ValorNuevo == "Activo" ? "bg-success" : "bg-danger")">
+                                            @cambio.ValorNuevo
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <pre class="json-formato">@Model.FormatearJson(cambio.ValorNuevo)</pre>
+                                    }
+                                </td>
                                 <td>@cambio.Usuario</td>
                             </tr>
                         }
@@ -54,4 +78,21 @@
             </table>
         </div>
     </div>
-</div> 
+</div>
+
+<style>
+    .json-formato {
+        font-family: Consolas, monospace;
+        font-size: 12px;
+        background-color: #f8f9fa;
+        padding: 8px;
+        margin: 0;
+        border-radius: 4px;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .badge {
+        font-size: 0.8rem;
+    }
+</style> 
