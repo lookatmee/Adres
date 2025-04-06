@@ -36,7 +36,7 @@
                     <dd class="col-sm-8">@Html.DisplayFor(model => model.Documento.Observaciones)</dd>
                 </dl>
 
-                <form method="post">
+                <form method="post" asp-page-handler="Delete" asp-route-id="@Model.Documento.Id">
                     <input type="hidden" asp-for="Documento.Id" />
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-danger">

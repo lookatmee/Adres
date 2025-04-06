@@ -37,11 +37,11 @@ public class DeleteModel : PageModel
         }
     }
 
-    public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostDeleteAsync(int id)
     {
         try
         {
-            var success = await _apiService.DeleteAsync($"documentacion/{Documento.Id}");
+            var success = await _apiService.DeleteAsync($"documentacion/{id}");
             if (!success)
             {
                 throw new Exception("No se pudo eliminar el documento");

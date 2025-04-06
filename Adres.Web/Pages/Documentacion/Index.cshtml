@@ -83,7 +83,30 @@
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = `./Delete?id=${id}`;
+                    eliminarDocumento(id);
+                }
+            });
+        }
+
+        function eliminarDocumento(id) {
+            $.ajax({
+                url: `/api/documentacion/${id}`,
+                type: 'DELETE',
+                success: function() {
+                    Swal.fire({
+                        title: '¡Eliminado!',
+                        text: 'El documento ha sido eliminado correctamente.',
+                        icon: 'success'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudo eliminar el documento. Por favor, intente nuevamente.',
+                        icon: 'error'
+                    });
                 }
             });
         }
