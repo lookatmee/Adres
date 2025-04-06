@@ -6,6 +6,7 @@ using FluentValidation;
 using Adres.Infrastructure.Repositories;
 using Adres.Application.Validators;
 using Adres.Domain.Common;
+using Adres.Domain.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateAdquisicionValidator>
 
 // Registrar repositorios
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IDocumentacionRepository, DocumentacionRepository>();
 
 // Registrar servicios
 builder.Services.AddScoped<IAdquisicionService, AdquisicionService>();

@@ -14,13 +14,13 @@ public class IndexModel : PageModel
         _apiService = apiService;
     }
 
-    public List<DocumentacionWebDto> Documentos { get; set; } = new();
+    public List<DocumentacionViewModel> Documentos { get; set; } = new();
 
     public async Task OnGetAsync()
     {
         try
         {
-            Documentos = await _apiService.GetListAsync<DocumentacionWebDto>("documentacion") ?? new();
+            Documentos = await _apiService.GetListAsync<DocumentacionViewModel>("documentacion") ?? new();
         }
         catch (Exception ex)
         {

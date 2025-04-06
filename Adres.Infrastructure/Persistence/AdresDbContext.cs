@@ -41,6 +41,23 @@ public class AdresDbContext : DbContext
                 .WithMany(a => a.Documentaciones)
                 .HasForeignKey(d => d.AdquisicionId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            entity.Property(e => e.TipoDocumento)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            entity.Property(e => e.NumeroDocumento)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            entity.Property(e => e.Observaciones)
+                .HasMaxLength(500);
+
+            entity.Property(e => e.CreadoPor)
+                .HasMaxLength(100);
+
+            entity.Property(e => e.ModificadoPor)
+                .HasMaxLength(100);
         });
 
         modelBuilder.Entity<HistorialCambios>(entity =>

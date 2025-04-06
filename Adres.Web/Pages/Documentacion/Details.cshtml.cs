@@ -5,16 +5,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Adres.Web.Pages.Documentacion;
 
-public class DeleteModel : PageModel
+public class DetailsModel : PageModel
 {
     private readonly IApiService _apiService;
 
-    public DeleteModel(IApiService apiService)
+    public DetailsModel(IApiService apiService)
     {
         _apiService = apiService;
     }
 
-    [BindProperty]
     public DocumentacionViewModel Documento { get; set; } = default!;
 
     public async Task<IActionResult> OnGetAsync(int id)
@@ -34,26 +33,6 @@ public class DeleteModel : PageModel
         {
             TempData["Error"] = $"Error al cargar el documento: {ex.Message}";
             return RedirectToPage("./Index");
-        }
-    }
-
-    public async Task<IActionResult> OnPostAsync()
-    {
-        try
-        {
-            var success = await _apiService.DeleteAsync($"documentacion/{Documento.Id}");
-            if (!success)
-            {
-                throw new Exception("No se pudo eliminar el documento");
-            }
-
-            TempData["Success"] = "Documento eliminado correctamente";
-            return RedirectToPage("./Index");
-        }
-        catch (Exception ex)
-        {
-            TempData["Error"] = $"Error al eliminar el documento: {ex.Message}";
-            return Page();
         }
     }
 } 
