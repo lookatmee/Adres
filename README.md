@@ -2,7 +2,11 @@
 
 # ADRES - Gestión Integral para el registro de requerimientos de adquisiciones
 
-[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)](http://adres-adolfo.somee.com/)
+## ¡Visita la Aplicación en Vivo!
+
+Te invitamos a explorar e interactuar con la aplicación publicada. Ingresa al siguiente enlace para ver en funcionamiento ADRES:
+
+🔗 [http://adres-adolfo.somee.com/](http://adres-adolfo.somee.com/)
 
 ## Descripción General
 
@@ -48,6 +52,8 @@ La solución se compone de varios proyectos organizados de la siguiente forma:
 
 > *(La imagen adjunta en el repositorio muestra la estructura completa de la solución.)*
 
+![image](https://github.com/user-attachments/assets/1637bfa1-d250-41de-895a-39b1b8a2190f)
+
 ---
 
 ## Instalación y Ejecución
@@ -58,8 +64,17 @@ La solución se compone de varios proyectos organizados de la siguiente forma:
 - Visual Studio 2022 o IDE de tu preferencia compatible con .NET 6
 - Git (para clonar el repositorio)
 
+### Ejecución del proyecto
+
+Dar clic en el area señalada como muestra la immagen o simplemente presionar (F5) en el Visual Studio
+![image](https://github.com/user-attachments/assets/88ed5cf0-c583-4625-b23b-926a02fcbc9d)
+
 ### Clonación del Repositorio
 
 ```bash
 git clone https://github.com/tu-usuario/adres.git
 cd adres
+
+
+
+
