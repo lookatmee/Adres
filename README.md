@@ -1,13 +1,12 @@
 ![image](https://github.com/user-attachments/assets/3610bb55-9c2e-47b1-bf31-3108b9303d88)
 
-# ADRES - Gestión Integral de Bienes y Proveedores
+# ADRES - Gestión Integral para el registro de requerimientos de adquisiciones
 
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)](http://adres-adolfo.somee.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ## Descripción General
 
-**ADRES** es una solución desarrollada en .NET 6 que implementa los principios de **Clean Architecture** para la capa backend y un proyecto web basado en **Razor Pages** para la parte frontend. El sistema expone una serie de APIs RESTful que son consumidas por la aplicación web, permitiendo gestionar de manera integral la información de bienes, adquisiciones, proveedores y unidades organizativas en entornos gubernamentales.
+**ADRES** es una solución desarrollada en .NET 9 que implementa los principios de **Clean Architecture** para la capa backend y un proyecto web basado en **Razor Pages** para la parte frontend. El sistema expone una serie de APIs RESTful que son consumidas por la aplicación web, permitiendo gestionar de manera integral la información de bienes, adquisiciones, proveedores y unidades organizativas en entornos gubernamentales.
 
 ---
 
@@ -23,7 +22,7 @@
 ## Tecnologías Utilizadas
 
 - **Backend:**
-  - .NET 6
+  - .NET 9
   - Clean Architecture
   - APIs RESTful
 
@@ -55,7 +54,7 @@ La solución se compone de varios proyectos organizados de la siguiente forma:
 
 ### Requisitos
 
-- [.NET 6 SDK](https://dotnet.microsoft.com/download/dotnet/6.0)
+- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
 - Visual Studio 2022 o IDE de tu preferencia compatible con .NET 6
 - Git (para clonar el repositorio)
 
